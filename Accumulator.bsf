@@ -1,0 +1,211 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 1991-2013 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+*/
+(header "symbol" (version "1.1"))
+(symbol
+	(rect 16 16 272 384)
+	(text "Accumulator" (rect 5 0 56 12)(font "Arial" ))
+	(text "inst" (rect 8 352 20 364)(font "Arial" ))
+	(port
+		(pt 0 32)
+		(input)
+		(text "Column[7..0]" (rect 0 0 50 12)(font "Arial" ))
+		(text "Column[7..0]" (rect 21 27 71 39)(font "Arial" ))
+		(line (pt 0 32)(pt 16 32)(line_width 3))
+	)
+	(port
+		(pt 0 48)
+		(input)
+		(text "DataDec[19..0]" (rect 0 0 59 12)(font "Arial" ))
+		(text "DataDec[19..0]" (rect 21 43 80 55)(font "Arial" ))
+		(line (pt 0 48)(pt 16 48)(line_width 3))
+	)
+	(port
+		(pt 0 64)
+		(input)
+		(text "DDC" (rect 0 0 21 12)(font "Arial" ))
+		(text "DDC" (rect 21 59 42 71)(font "Arial" ))
+		(line (pt 0 64)(pt 16 64)(line_width 1))
+	)
+	(port
+		(pt 0 80)
+		(input)
+		(text "DDR" (rect 0 0 22 12)(font "Arial" ))
+		(text "DDR" (rect 21 75 43 87)(font "Arial" ))
+		(line (pt 0 80)(pt 16 80)(line_width 1))
+	)
+	(port
+		(pt 0 96)
+		(input)
+		(text "ClockFromGen" (rect 0 0 61 12)(font "Arial" ))
+		(text "ClockFromGen" (rect 21 91 82 103)(font "Arial" ))
+		(line (pt 0 96)(pt 16 96)(line_width 1))
+	)
+	(port
+		(pt 0 112)
+		(input)
+		(text "Reset" (rect 0 0 24 12)(font "Arial" ))
+		(text "Reset" (rect 21 107 45 119)(font "Arial" ))
+		(line (pt 0 112)(pt 16 112)(line_width 1))
+	)
+	(port
+		(pt 256 32)
+		(output)
+		(text "DataAccOut[19..0]" (rect 0 0 74 12)(font "Arial" ))
+		(text "DataAccOut[19..0]" (rect 161 27 235 39)(font "Arial" ))
+		(line (pt 256 32)(pt 240 32)(line_width 3))
+	)
+	(port
+		(pt 256 48)
+		(output)
+		(text "DataAccClock" (rect 0 0 59 12)(font "Arial" ))
+		(text "DataAccClock" (rect 176 43 235 55)(font "Arial" ))
+		(line (pt 256 48)(pt 240 48)(line_width 1))
+	)
+	(port
+		(pt 256 64)
+		(output)
+		(text "DataAccReady" (rect 0 0 64 12)(font "Arial" ))
+		(text "DataAccReady" (rect 171 59 235 71)(font "Arial" ))
+		(line (pt 256 64)(pt 240 64)(line_width 1))
+	)
+	(port
+		(pt 256 80)
+		(output)
+		(text "AddrReadCycl[8..0]" (rect 0 0 82 12)(font "Arial" ))
+		(text "AddrReadCycl[8..0]" (rect 153 75 235 87)(font "Arial" ))
+		(line (pt 256 80)(pt 240 80)(line_width 3))
+	)
+	(port
+		(pt 256 96)
+		(output)
+		(text "ColumnChangeRegI" (rect 0 0 81 12)(font "Arial" ))
+		(text "ColumnChangeRegI" (rect 154 91 235 103)(font "Arial" ))
+		(line (pt 256 96)(pt 240 96)(line_width 1))
+	)
+	(port
+		(pt 256 112)
+		(output)
+		(text "ColumnChangeRegII" (rect 0 0 83 12)(font "Arial" ))
+		(text "ColumnChangeRegII" (rect 152 107 235 119)(font "Arial" ))
+		(line (pt 256 112)(pt 240 112)(line_width 1))
+	)
+	(port
+		(pt 256 128)
+		(output)
+		(text "ColumnReg[7..0]" (rect 0 0 68 12)(font "Arial" ))
+		(text "ColumnReg[7..0]" (rect 167 123 235 135)(font "Arial" ))
+		(line (pt 256 128)(pt 240 128)(line_width 3))
+	)
+	(port
+		(pt 256 144)
+		(output)
+		(text "AddrWriteAcc[8..0]" (rect 0 0 81 12)(font "Arial" ))
+		(text "AddrWriteAcc[8..0]" (rect 154 139 235 151)(font "Arial" ))
+		(line (pt 256 144)(pt 240 144)(line_width 3))
+	)
+	(port
+		(pt 256 160)
+		(output)
+		(text "RegStartDDR" (rect 0 0 59 12)(font "Arial" ))
+		(text "RegStartDDR" (rect 176 155 235 167)(font "Arial" ))
+		(line (pt 256 160)(pt 240 160)(line_width 1))
+	)
+	(port
+		(pt 256 176)
+		(output)
+		(text "DataAccRead[19..0]" (rect 0 0 82 12)(font "Arial" ))
+		(text "DataAccRead[19..0]" (rect 153 171 235 183)(font "Arial" ))
+		(line (pt 256 176)(pt 240 176)(line_width 3))
+	)
+	(port
+		(pt 256 192)
+		(output)
+		(text "AddrReadOut[8..0]" (rect 0 0 77 12)(font "Arial" ))
+		(text "AddrReadOut[8..0]" (rect 158 187 235 199)(font "Arial" ))
+		(line (pt 256 192)(pt 240 192)(line_width 3))
+	)
+	(port
+		(pt 256 208)
+		(output)
+		(text "WriteEnableAcc" (rect 0 0 67 12)(font "Arial" ))
+		(text "WriteEnableAcc" (rect 168 203 235 215)(font "Arial" ))
+		(line (pt 256 208)(pt 240 208)(line_width 1))
+	)
+	(port
+		(pt 256 224)
+		(output)
+		(text "ClockReadAcc" (rect 0 0 62 12)(font "Arial" ))
+		(text "ClockReadAcc" (rect 173 219 235 231)(font "Arial" ))
+		(line (pt 256 224)(pt 240 224)(line_width 1))
+	)
+	(port
+		(pt 256 240)
+		(output)
+		(text "DataAccWrite[19..0]" (rect 0 0 82 12)(font "Arial" ))
+		(text "DataAccWrite[19..0]" (rect 153 235 235 247)(font "Arial" ))
+		(line (pt 256 240)(pt 240 240)(line_width 3))
+	)
+	(port
+		(pt 256 256)
+		(output)
+		(text "AddrReadAcc[8..0]" (rect 0 0 81 12)(font "Arial" ))
+		(text "AddrReadAcc[8..0]" (rect 154 251 235 263)(font "Arial" ))
+		(line (pt 256 256)(pt 240 256)(line_width 3))
+	)
+	(port
+		(pt 256 272)
+		(output)
+		(text "Clock50MHz" (rect 0 0 50 12)(font "Arial" ))
+		(text "Clock50MHz" (rect 185 267 235 279)(font "Arial" ))
+		(line (pt 256 272)(pt 240 272)(line_width 1))
+	)
+	(port
+		(pt 256 288)
+		(output)
+		(text "Clock25MHz" (rect 0 0 50 12)(font "Arial" ))
+		(text "Clock25MHz" (rect 185 283 235 295)(font "Arial" ))
+		(line (pt 256 288)(pt 240 288)(line_width 1))
+	)
+	(port
+		(pt 256 304)
+		(output)
+		(text "Clock12MHz" (rect 0 0 49 12)(font "Arial" ))
+		(text "Clock12MHz" (rect 186 299 235 311)(font "Arial" ))
+		(line (pt 256 304)(pt 240 304)(line_width 1))
+	)
+	(port
+		(pt 256 320)
+		(output)
+		(text "ColumnChange" (rect 0 0 61 12)(font "Arial" ))
+		(text "ColumnChange" (rect 174 315 235 327)(font "Arial" ))
+		(line (pt 256 320)(pt 240 320)(line_width 1))
+	)
+	(port
+		(pt 256 336)
+		(output)
+		(text "IterationOnColumn[5..0]" (rect 0 0 93 12)(font "Arial" ))
+		(text "IterationOnColumn[5..0]" (rect 142 331 235 343)(font "Arial" ))
+		(line (pt 256 336)(pt 240 336)(line_width 3))
+	)
+	(drawing
+		(rectangle (rect 16 16 240 352)(line_width 1))
+	)
+)

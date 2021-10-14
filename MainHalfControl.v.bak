@@ -1,0 +1,33 @@
+module MainHalfControl (
+	input 					ClockFromADC,
+	input 					ClockFromGen,
+	input 					SynchrM,
+	input 					Reset,
+	input unsigned			[13:0] Data,
+	output wire 			CLKDivPos, CLKDivNeg, CLKDivFaster,
+	output wire 			WriteEnable, ReadEnable,
+	output wire				BuffOn,
+	output reg			 	[12:0] AddrWrite,		// 0..8191
+	output reg 				[12:0] AddrRead,
+	output wire signed 	[13:0] DataOut
+	);
+	
+
+reg SynchrMt, SynchrMd; // регистры детектора фронта SynchrM
+reg WrEnt, WrEnd; 		// регистры детектора спада WrEn
+	
+assign DataOut = Data - 14'd8192;
+
+assign BuffOn = (WrEnt && (!WrEnd))? 1'b1 : 1'b0;
+	
+assign WriteEnable	= (AddrWrite < 4300)	?	1'b1 : 1'b0;
+assign ReadEnable		= (AddrRead < 4300)	?	1'b1 : 1'b0;
+	
+reg CLKDividedPos = 0, CLKDividedNeg = 0, CLKDividedCount; // регистры делителя частоты
+reg unsigned [4:0] CountDivider = 5'd0;
+assign CLKDivNeg 		= !CLKDividedNeg;
+assign CLKDivPos 		= !CLKDividedPos;
+assign CLKDivFaster 	= !CLKDividedCount;	
+	
+	
+endmodule

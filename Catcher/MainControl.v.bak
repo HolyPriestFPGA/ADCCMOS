@@ -1,0 +1,571 @@
+module MainControl (
+	input 					ClockFromADC,
+	input 					ClockFromGen,
+	input 					SynchrM, Fsk,
+	input 					[13:0]	Data,
+	input 					[15:0]	Distance,
+	input						[15:0]	ROMsin, ROMcos,
+	input 					[17:0]	DataAccRe, DataAccIm, DataAccU,
+	output wire 			CLKDivPos, CLKDivNeg, CLKDivFaster, 
+	output wire				ClockRAM,
+	output reg 				WriteEnableEven, ReadEnableEven, WriteEnableOdd, ReadEnableOdd,
+	output reg				Reset, WriteStartT, WriteStartD, PosHalf,
+	output reg			 	[7:0]		AddrWriteEven, AddrWriteOdd,
+	output reg 				[7:0]		AddrReadEven, AddrReadOdd,
+	output wire signed 	[13:0]	DataOutSlow,
+	output reg				[12:0]	CounterStart,
+	output reg 				WriteStart, SynchrMt, SynchrMd,
+	output reg 				[15:0]	DistanceRegI
+	,output wire 			CorOn
+	,output wire 		 	[19:0]	DataCor
+	,output reg signed 	[17:0]	PipeIRegI = 0,	PipeIRegII = 0, PipeIRegVI = 0, PipeIRegVII = 0
+	,output reg signed 	[15:0]	PipeIRegIII = 0,	PipeIRegV = 0
+	,output reg signed 	[17:0]	PipeIRegIV = 0
+	,output reg signed 	[17:0]	PipeIIRegI = 0,		PipeIIRegIII = 0,	PipeIIRegIV = 0
+	,output reg signed 	[16:0]	PipeIIRegII = 0
+	,output reg signed 	[18:0]	PipeIIIRegI = 0,	PipeIIIRegII = 0
+	,output reg signed 	[19:0]	PipeIVRegI = 0
+	,output reg				[13:0]	PipeInI, PipeInII, PipeInIII, PipeInIV, PipeInV, PipeInVI, PipeInVII
+	,output reg 						DataEnableI,	DataEnableII,	DataEnableIII,	DataEnableIV, DataEnableV, DataEnableVI, DataEnableVII
+	,output reg 						DataEnableVIII, DataEnableIX, DataEnableX, DataEnableXI, DataEnableXII, DEAddrRAMReset, RAMWRStart
+	,output wire						RAMWriteEnable
+	,output reg 						FskRegI, FskRegII
+	,output reg 			[6:0]		AddrROM
+	,output /*reg*/ wire				ResetSynchrM
+	,output reg	signed	[35:0]	sinReg, cosReg 
+	,output reg unsigned [17:0]	UReg
+	,output reg	signed	[19:0]	DataRe, DataIm
+	,output reg unsigned	[18:0]	DataU
+	,output wire 						DataClock
+	,output reg 			[7:0]		AddrRAM
+	,output reg							RAMOutputWRen
+	);
+
+
+//assign DataOutSlow	=	CLKDivNeg	? DataEven	-	14'd8192	: DataOdd	-	14'd8192;
+assign DataOutSlow	=	CLKDivNeg	? DataEven	: DataOdd; //-temp-\\
+
+
+//------------------Сдвиг записи на D-------------------//
+//------------------------------------------------------//
+
+//reg SynchrMt, SynchrMd;
+
+always @(negedge ClockFromADC)
+begin
+	SynchrMt <= SynchrM;
+	SynchrMd	<=	SynchrMt;
+end
+
+always @(posedge Fsk)
+begin
+	DistanceRegI <= Distance;
+end
+
+//reg [12:0]	CounterStart;
+always @(negedge ClockFromGen)
+begin
+if (!Reset)
+	begin
+		if (SynchrMt && (!SynchrMd))
+			begin
+				CounterStart	<= 13'd0;
+				WriteStart		<= 1'b0;
+			end
+		else
+			begin
+				if (CounterStart < 4160)
+					begin
+						CounterStart	<= CounterStart	+	1'b1;
+					end
+					
+				if (DistanceRegI < 16'd127)
+					begin
+						if (CounterStart == 5)
+							begin
+								WriteStart <= 1'b1;
+							end
+					end
+				else 
+					begin
+						if	(DistanceRegI > 16'd4160)
+							begin
+								if (CounterStart == 4160/* - 2*/)
+									begin
+										WriteStart <= 1'b1;
+									end
+							end
+						else
+							begin
+								if (CounterStart == DistanceRegI - 128/* - 3*/)
+									begin
+										WriteStart <= 1'b1;
+									end
+							end
+					end
+			end
+	end
+else
+	begin
+		CounterStart	<= 13'd8191;
+	end
+end
+//------------------------------------------------------//
+//------------------------------------------------------//
+
+
+
+//------------------------------------------------------//
+//------------------------------------------------------//
+always @(posedge ClockFromGen)
+begin
+	if (AddrWriteEven < 8'd128)	WriteEnableEven	<= 1'b1;		else	WriteEnableEven	<= 1'b0;
+	if (AddrReadEven	< 8'd128)	ReadEnableEven		<= 1'b1;		else	ReadEnableEven		<= 1'b0;
+	if (AddrWriteOdd	< 8'd128)	WriteEnableOdd		<= 1'b1;		else	WriteEnableOdd		<= 1'b0;
+	if (AddrReadOdd	< 8'd128)	ReadEnableOdd		<= 1'b1;		else	ReadEnableOdd		<= 1'b0;
+end
+//------------------------------------------------------//
+//------------------------------------------------------//
+
+//------------------Запись нечётных---------------------//
+//------------------------------------------------------//
+//reg WriteStartT;
+//reg WriteStartD;
+
+always @(posedge PosHalf)
+begin
+	AddrWriteOdd <= AddrWriteEven;	
+	
+	WriteStartT	<= WriteStart;
+//	WriteStartT	<= WriteStartWire;
+	WriteStartD	<=	WriteStartT;			
+end
+//------------------------------------------------------//
+
+//---------Счётчик адреса запси чётных отсчётов---------//
+always @(negedge PosHalf)
+begin
+if (!Reset)											//
+	begin												//
+		if (WriteStartT && (!WriteStartD)) 
+			begin
+				AddrWriteEven <= 8'd0;
+			end
+		else
+			begin
+				if (AddrWriteEven < 8'd128)
+					begin
+						AddrWriteEven <= AddrWriteEven + 1'b1;
+					end		
+				else
+					begin
+						AddrWriteEven	<=	AddrWriteEven;
+					end
+			end	
+	end
+else													
+	begin
+		AddrWriteEven <= 8'd128;							
+	end													
+end
+//------------------------------------------------------//
+//------------------------------------------------------//
+
+
+
+
+
+
+
+//------------------Чтение чётных-----------------------//
+//------------------------------------------------------//
+reg WrEnt;
+reg WrEnd;
+
+always @(negedge CLKDividedPos)	
+begin
+if (!Reset)											//
+begin													//
+	WrEnt <= WriteEnableEven;
+	WrEnd <= WrEnt;
+	if (WrEnt && (!WrEnd))
+		begin
+			AddrReadEven <= 8'd0;
+		end
+	else
+		begin
+			if (AddrReadEven < 8'd128)
+				begin
+					AddrReadEven	<=	AddrReadEven + 1'b1;
+				end	
+			else
+				begin
+					AddrReadEven	<=	AddrReadEven;
+				end
+		end
+end
+	else													
+		begin
+			AddrReadEven <= 8'd128;
+		end												
+end
+//------------------------------------------------------//
+
+
+//-----------------Чтение нечётных----------------------//
+always @(posedge CLKDivPos)	
+begin
+	AddrReadOdd <= AddrReadEven;	
+end
+//------------------------------------------------------//
+//------------------------------------------------------//
+
+
+
+
+
+//-----------------Делитель частоты---------------------//
+//------------------------------------------------------//
+//reg PosHalf = 0;
+
+assign CLKDivNeg 		= CLKDividedNeg;
+assign CLKDivPos 		= CLKDividedPos;
+assign CLKDivFaster 	= CLKDividedCountI;
+assign ClockRAM		= !CLKDividedCount;	
+
+
+always @(posedge ClockFromADC)
+begin
+	PosHalf <= !PosHalf;
+end	
+
+reg CLKDividedPos = 0;
+reg CLKDividedNeg = 0;
+reg CLKDividedCount, CLKDividedCountI;
+
+always @(posedge ClockFromGen)
+begin
+	CLKDividedCount 	<= !CLKDividedCount;
+end
+
+always @(posedge CLKDividedCount)
+begin
+	CLKDividedCountI 	<= !CLKDividedCountI;
+end
+
+always @(posedge CLKDividedCountI) 
+begin
+	CLKDividedPos 	<= !CLKDividedPos;
+end
+always @(negedge CLKDividedCountI) 
+begin			
+	if (Reset)				
+		CLKDividedNeg <= CLKDividedPos;
+	else							
+		CLKDividedNeg <= !CLKDividedNeg; 
+end
+//------------------------------------------------------//
+//------------------------------------------------------//
+
+
+
+//----------------Блок общего сброса--------------------//
+//------------------------------------------------------//
+reg [4:0] CounterReset;
+always @(posedge ClockFromGen)
+begin		
+	if (CounterReset < 5'd30)
+		begin
+			Reset <= 1;
+			CounterReset <= CounterReset + 1'b1;
+		end
+	else
+		Reset <= 0;
+end
+//------------------------------------------------------//
+//------------------------------------------------------//
+
+
+
+//-----------------Первичная память---------------------//
+//------------------------------------------------------//
+	(* ramstyle = "no_rw_check, M4K" *) reg [13:0] RAMEven[127:0];
+	reg [13:0] DataEven, DataOdd;
+	
+	always @ (posedge PosHalf)
+	begin
+		if (WriteEnableEven)
+			RAMEven[AddrWriteEven] <= Data;
+	end
+	
+	always @ (posedge CLKDivPos)
+	begin
+		DataEven <= RAMEven[AddrReadEven];
+	end
+	
+	
+	(* ramstyle = "no_rw_check, M4K" *) reg [13:0] RAMOdd[127:0];
+	
+	always @ (negedge PosHalf)
+	begin
+		if (WriteEnableOdd)
+			RAMOdd[AddrWriteOdd] <= Data;
+	end
+	
+	always @ (negedge CLKDivPos)
+	begin
+		DataOdd <= RAMOdd[AddrReadOdd];
+	end
+//------------------------------------------------------//
+//------------------------------------------------------//
+
+
+
+//---------------------Коррелятор-----------------------//
+//------------------------------------------------------//
+wire signed  [13:0] DataADC;
+assign DataADC = DataOutSlow;
+
+assign DataClock = CLKDividedPos;
+
+wire DataEnable;
+assign DataEnable = ReadEnableOdd;
+
+assign DataCor	= PipeIVRegI[19]	?	~PipeIVRegI	:	PipeIVRegI;	//2
+assign CorOn 	= DataEnableXI;	
+	
+//reg signed [17:0] PipeIRegI, 		PipeIRegII, 	PipeIRegVI,	PipeIRegVII;
+//reg signed [15:0] PipeIRegIII,	PipeIRegV;
+//reg signed [17:0]	PipeIRegIV;
+//	
+//reg signed [17:0]	PipeIIRegI,		PipeIIRegIII,	PipeIIRegIV;
+//reg signed [16:0]	PipeIIRegII;
+//	
+//reg signed [18:0]	PipeIIIRegI,	PipeIIIRegII;
+//
+//reg signed [19:0]	PipeIVRegI;
+//
+//reg signed [13:0]	PipeInI, PipeInII, PipeInIII, PipeInIV, PipeInV, PipeInVI, PipeInVII;
+//reg DataEnableI,	DataEnableII,	DataEnableIII,	DataEnableIV, DataEnableV, DataEnableVI, DataEnableVII, DataEnableVIII, DataEnableIX, DataEnableX, DataEnableXI;
+	
+
+//reg DataEnableXII, DEAddrRAMReset;
+	
+always @(negedge CLKDivFaster)
+begin
+	DataEnableI		<= DataEnable;
+	DataEnableII	<= DataEnableI;
+	DataEnableIII	<= DataEnableII;
+	DataEnableIV	<= DataEnableIII;
+	
+	DataEnableV		<= DataEnableIV;
+	DataEnableVI	<= DataEnableV;
+	DataEnableVII	<= DataEnableVI;
+	DataEnableVIII	<= DataEnableVII;
+	DataEnableIX	<= DataEnableVIII;
+	DataEnableX		<= DataEnableIX;
+	DataEnableXI	<= DataEnableX;
+	
+	RAMWRStart		<= DataEnableXII;
+	end
+	
+always @(posedge CLKDivFaster)
+begin
+	DataEnableXII	<= DataEnableXI;
+	DEAddrRAMReset	<=	DataEnableXII;
+end
+
+wire AddrRAMReset;
+assign AddrRAMReset = (DataEnableXII&&!DEAddrRAMReset);
+
+always @(negedge CLKDivFaster /*or posedge AddrRAMReset*/)
+begin
+	if (AddrRAMReset)
+		begin
+			AddrRAM <= 0;
+		end
+	else
+		begin 
+			if (AddrRAM < 8'd255)
+				begin
+					AddrRAM	<= AddrRAM + 1'b1;
+				end
+			else
+				begin
+					AddrRAM	<= AddrRAM;
+				end
+		end
+end
+
+always @(posedge CLKDivFaster)
+begin
+
+		
+	if (DataEnable || DataEnableXI)
+		begin
+		//--------------------------------------------------------//
+		//--------------Выравнивание данных с АЦП-----------------//
+			PipeInVII	<= DataADC;
+			PipeInVI		<= PipeInVII;
+			PipeInV		<= PipeInVI;
+			PipeInIV		<= PipeInV;
+			PipeInIII	<= PipeInIV;
+			PipeInII		<= PipeInIII;
+			PipeInI		<= PipeInII;
+		//--------------------------------------------------------//
+		//--------------------------------------------------------//
+		
+		//--------------------------------------------------------//
+		//----------------------Первый пайп-----------------------//
+			PipeIRegI		<=	~ ((PipeInI 	<< 3)	+ (PipeInI 		<< 2));
+			PipeIRegII		<=		(PipeInII	<< 3)	+ (PipeInII 	<< 2)	;
+			PipeIRegIII		<=		(PipeInIII	<< 2)	+ PipeInIII				;
+			PipeIRegIV		<=	~ 	(PipeInIV 	<< 4)								;
+			PipeIRegV		<=		(PipeInV 	<< 2)	+ PipeInV				;
+			PipeIRegVI		<=		(PipeInVI 	<< 3)	+ (PipeInVI		<< 2)	;
+			PipeIRegVII		<= ~ ((PipeInVII 	<< 3)	+ (PipeInVII 	<< 2));
+		//--------------------------------------------------------//
+		//--------------------------------------------------------//
+		
+//		//--------------------------------------------------------//
+//		//--------------Первый пайп на умножителях----------------//
+//			PipeIRegI		<=	~	3'd6*PipeInI;
+//			PipeIRegII		<=		3'd6*PipeInII;
+//			PipeIRegIII		<=		3'd5*PipeInIII;
+//			PipeIRegIV		<=	~ 	3'd7*PipeInIV;
+//			PipeIRegV		<=		3'd5*PipeInV;
+//			PipeIRegVI		<=		3'd6*PipeInVI;
+//			PipeIRegVII		<= ~	3'd6*PipeInVII;
+//		//--------------------------------------------------------//
+//		//--------------------------------------------------------//
+		
+		//--------------------------------------------------------//
+		//----------------------Второй пайп-----------------------//
+			PipeIIRegI		<=	PipeIRegI	+	PipeIRegII;
+			PipeIIRegII		<=	PipeIRegIII	+	PipeIRegV;
+			PipeIIRegIII	<=	PipeIRegIV;
+			PipeIIRegIV		<=	PipeIRegVI	+	PipeIRegVII;
+		//--------------------------------------------------------//
+		//--------------------------------------------------------//
+		
+		//--------------------------------------------------------//
+		//----------------------Третий пайп-----------------------//
+			PipeIIIRegI		<=	PipeIIRegI		+	PipeIIRegII;
+			PipeIIIRegII 	<= PipeIIRegIII	+	PipeIIRegIV;
+		//--------------------------------------------------------//
+		//--------------------------------------------------------//
+		
+		//--------------------------------------------------------//
+		//--------------------Четвёртный пайп---------------------//
+			PipeIVRegI		<= PipeIIIRegI	+	PipeIIIRegII;
+		//--------------------------------------------------------//
+		//--------------------------------------------------------//
+		end
+end
+//------------------------------------------------------//
+//------------------------------------------------------//
+
+
+
+//-----------------Счётчик синхроэмов-------------------//
+//------------------------------------------------------//
+
+//
+//reg	FskRegI, FskRegII;
+//
+//reg	[6:0]	AddrROM;
+//
+//wire	ResetSynchM;
+assign ResetSynchrM = (FskRegI && !FskRegII);
+
+always @(posedge SynchrM)
+begin
+	FskRegI	<= Fsk;
+	FskRegII	<= FskRegI;
+end
+
+always @(posedge SynchrM or posedge ResetSynchrM)
+begin
+	if (ResetSynchrM)
+		begin
+			AddrROM <= 7'd0;												// !!!ИСПРАВИТЬ!!!
+		end
+	else
+		begin
+			AddrROM	<=	AddrROM + 1'b1;								// это номер синхроэма
+		end
+end
+
+//------------------------------------------------------//
+//------------------------------------------------------//
+
+
+
+//-------------------Поиск гармоники--------------------//
+//------------------------------------------------------//
+//reg	[35:0] sinReg, cosReg, UReg;
+
+assign RAMWriteEnable = RAMWRStart? CLKDividedCountI: 1'b0;
+
+always @(negedge CLKDivFaster)
+begin
+	UReg		<= DataCor[19:2];
+	sinReg	<= ROMsin*DataCor;
+	cosReg	<= ROMcos*DataCor;
+	
+//	UReg		<= DataCor			>>	2;
+//	sinReg	<= ROMsin*DataCor >> 18;
+//	cosReg	<= ROMcos*DataCor >> 18;
+end
+
+always @(posedge CLKDivFaster)
+begin
+	if (AddrROM == 0) // неправильно 
+		begin
+			DataIm <= sinReg[35:18];
+			DataRe <= cosReg[35:18];
+			DataU	 <= UReg;
+		end
+	else
+		begin
+			if (!DataIm[19]&&DataIm[18])
+				DataIm	<= 20'b01011111111111111111;
+			else
+				if (DataIm[19]&&!DataIm[18])
+					DataIm	<= 20'b10100000000000000000;
+				else
+					DataIm	<= DataAccIm	+	sinReg[35:18];
+				
+			if (!DataRe[19]&&DataRe[18])
+				DataRe	<= 20'b01011111111111111111;
+			else
+				if (DataRe[19]&&!DataRe[18])
+					DataRe	<= 20'b10100000000000000000;
+				else
+					DataRe	<= DataAccRe	+	cosReg[35:18];
+			
+//			if (DataU > 18'h3FFFF)
+			if (DataU[18])
+				begin
+					DataU		<= 18'h3FFFF;
+				end
+			else
+				begin
+					DataU		<= DataAccU	+	UReg;
+				end
+		end
+end
+
+always @(posedge CLKDivFaster)
+begin
+	if (AddrROM == 7'd15)
+		RAMOutputWRen	<= 1'b1;
+	else
+		RAMOutputWRen	<= 1'b0;
+end
+
+//------------------------------------------------------//
+//------------------------------------------------------//
+
+endmodule
+

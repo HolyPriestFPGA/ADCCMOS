@@ -1,0 +1,9 @@
+module Controller72 (
+	input Clock, RXDV,
+	input [15:0]	RX,
+	output reg TXDV,
+	output reg [15:0]	TX, 
+	output reg [7:0]	Column,
+	output wire RAMOReadClock
+//	,output reg RXDVI, RXDVII, RXDVIII
+); 

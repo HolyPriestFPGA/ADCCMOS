@@ -1,0 +1,11 @@
+module Switcher (
+input ReadyBuff,
+input Fast,
+input [13:0] DataSlow,
+
+input [15:0] PC,
+input [15:0] PD,
+
+input [1:0]
+
+

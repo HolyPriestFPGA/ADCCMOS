@@ -1,0 +1,5 @@
+
+
+C:/Users/Ponitkov/Desktop/FPGA/project/XTH-40M1-02/DD4/ADCCMOS/CorRAMHalf.v
+
+Aug 17 09AM:40:55>: Failed to generate the synthesis netlist file

@@ -1,0 +1,153 @@
+-- Copyright (C) 1991-2013 Altera Corporation
+-- Your use of Altera Corporation's design tools, logic functions 
+-- and other software and tools, and its AMPP partner logic 
+-- functions, and any output files from any of the foregoing 
+-- (including device programming or simulation files), and any 
+-- associated documentation or information are expressly subject 
+-- to the terms and conditions of the Altera Program License 
+-- Subscription Agreement, Altera MegaCore Function License 
+-- Agreement, or other applicable license agreement, including, 
+-- without limitation, that your use is for the sole purpose of 
+-- programming logic devices manufactured by Altera and sold by 
+-- Altera or its authorized distributors.  Please refer to the 
+-- applicable agreement for further details.
+
+-- Quartus II generated Memory Initialization File (.mif)
+
+WIDTH=16;
+DEPTH=128;
+
+ADDRESS_RADIX=UNS;
+DATA_RADIX=DEC;
+
+CONTENT BEGIN
+           0	:	           0; 
+           1	:	        1608; 
+           2	:	        3212; 
+           3	:	        4808; 
+           4	:	        6393; 
+           5	:	        7962; 
+           6	:	        9512; 
+           7	:	       11039; 
+           8	:	       12539; 
+           9	:	       14010; 
+          10	:	       15446; 
+          11	:	       16846; 
+          12	:	       18204; 
+          13	:	       19519; 
+          14	:	       20787; 
+          15	:	       22005; 
+          16	:	       23170; 
+          17	:	       24279; 
+          18	:	       25329; 
+          19	:	       26319; 
+          20	:	       27245; 
+          21	:	       28105; 
+          22	:	       28898; 
+          23	:	       29621; 
+          24	:	       30273; 
+          25	:	       30852; 
+          26	:	       31356; 
+          27	:	       31785; 
+          28	:	       32137; 
+          29	:	       32412; 
+          30	:	       32609; 
+          31	:	       32728; 
+          32	:	       32767; 
+          33	:	       32728; 
+          34	:	       32609; 
+          35	:	       32412; 
+          36	:	       32137; 
+          37	:	       31785; 
+          38	:	       31356; 
+          39	:	       30852; 
+          40	:	       30273; 
+          41	:	       29621; 
+          42	:	       28898; 
+          43	:	       28105; 
+          44	:	       27245; 
+          45	:	       26319; 
+          46	:	       25329; 
+          47	:	       24279; 
+          48	:	       23170; 
+          49	:	       22005; 
+          50	:	       20787; 
+          51	:	       19519; 
+          52	:	       18204; 
+          53	:	       16846; 
+          54	:	       15446; 
+          55	:	       14010; 
+          56	:	       12539; 
+          57	:	       11039; 
+          58	:	        9512; 
+          59	:	        7962; 
+          60	:	        6393; 
+          61	:	        4808; 
+          62	:	        3212; 
+          63	:	        1608; 
+          64	:	           0; 
+          65	:	       -1608; 
+          66	:	       -3212; 
+          67	:	       -4808; 
+          68	:	       -6393; 
+          69	:	       -7962; 
+          70	:	       -9512; 
+          71	:	      -11039; 
+          72	:	      -12539; 
+          73	:	      -14010; 
+          74	:	      -15446; 
+          75	:	      -16846; 
+          76	:	      -18204; 
+          77	:	      -19519; 
+          78	:	      -20787; 
+          79	:	      -22005; 
+          80	:	      -23170; 
+          81	:	      -24279; 
+          82	:	      -25329; 
+          83	:	      -26319; 
+          84	:	      -27245; 
+          85	:	      -28105; 
+          86	:	      -28898; 
+          87	:	      -29621; 
+          88	:	      -30273; 
+          89	:	      -30852; 
+          90	:	      -31356; 
+          91	:	      -31785; 
+          92	:	      -32137; 
+          93	:	      -32412; 
+          94	:	      -32609; 
+          95	:	      -32728; 
+          96	:	      -32767; 
+          97	:	      -32728; 
+          98	:	      -32609; 
+          99	:	      -32412; 
+         100	:	      -32137; 
+         101	:	      -31785; 
+         102	:	      -31356; 
+         103	:	      -30852; 
+         104	:	      -30273; 
+         105	:	      -29621; 
+         106	:	      -28898; 
+         107	:	      -28105; 
+         108	:	      -27245; 
+         109	:	      -26319; 
+         110	:	      -25329; 
+         111	:	      -24279; 
+         112	:	      -23170; 
+         113	:	      -22005; 
+         114	:	      -20787; 
+         115	:	      -19519; 
+         116	:	      -18204; 
+         117	:	      -16846; 
+         118	:	      -15446; 
+         119	:	      -14010; 
+         120	:	      -12539; 
+         121	:	      -11039; 
+         122	:	       -9512; 
+         123	:	       -7962; 
+         124	:	       -6393; 
+         125	:	       -4808; 
+         126	:	       -3212; 
+         127	:	       -1608; 
+
+END;

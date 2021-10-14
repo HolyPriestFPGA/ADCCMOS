@@ -1,0 +1,29 @@
+
+#комментить для КТЦ электроинки
+#derive_clock_uncertainty 
+#------------------------------
+
+
+
+# клок АЦП 100 МГц
+create_clock -period 10 \
+	-name {CLKFromADC} \
+	[get_ports {CLKFromADC}]
+	
+# клок генератора 100 МГц
+create_clock -period 10 \
+	-name {CLKFromGen} \
+	[get_ports {CLKFromGen}]
+	
+set_clock_groups -exclusive -group {CLKFromADC} -group {CLKFromGen}  
+
+
+
+create_generated_clock -source [get_ports {CLKFromGen}] -divide_by 2 [get_registers {RAMBuffControl:inst3|CLKDividedCount~I}]
+create_generated_clock -source [get_ports {CLKFromADC}] -divide_by 2 [get_registers {RAMBuffControl:inst3|RAMWriteClock~I}]	
+create_generated_clock -source [get_registers {RAMBuffControl:inst3|CLKDividedCount~I}] -divide_by 2 [get_registers {RAMBuffControl:inst3|CLKDividedPos~I}]	
+create_generated_clock -source [get_registers {RAMBuffControl:inst3|CLKDividedCount~I}] -divide_by 2 [get_registers {RAMBuffControl:inst3|CLKDividedNeg~I}]	
+	
+	
+	
+	

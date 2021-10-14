@@ -1,0 +1,190 @@
+/*
+WARNING: Do NOT edit the input and output ports in this file in a text
+editor if you plan to continue editing the block that represents it in
+the Block Editor! File corruption is VERY likely to occur.
+*/
+/*
+Copyright (C) 1991-2013 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+*/
+(header "symbol" (version "1.1"))
+(symbol
+	(rect 16 16 272 320)
+	(text "MainHalfControl" (rect 5 0 68 12)(font "Arial" ))
+	(text "inst" (rect 8 288 20 300)(font "Arial" ))
+	(port
+		(pt 0 32)
+		(input)
+		(text "ClockFromADC" (rect 0 0 67 12)(font "Arial" ))
+		(text "ClockFromADC" (rect 21 27 88 39)(font "Arial" ))
+		(line (pt 0 32)(pt 16 32)(line_width 1))
+	)
+	(port
+		(pt 0 48)
+		(input)
+		(text "ClockFromGen" (rect 0 0 61 12)(font "Arial" ))
+		(text "ClockFromGen" (rect 21 43 82 55)(font "Arial" ))
+		(line (pt 0 48)(pt 16 48)(line_width 1))
+	)
+	(port
+		(pt 0 64)
+		(input)
+		(text "SynchrM" (rect 0 0 37 12)(font "Arial" ))
+		(text "SynchrM" (rect 21 59 58 71)(font "Arial" ))
+		(line (pt 0 64)(pt 16 64)(line_width 1))
+	)
+	(port
+		(pt 0 80)
+		(input)
+		(text "Reset" (rect 0 0 24 12)(font "Arial" ))
+		(text "Reset" (rect 21 75 45 87)(font "Arial" ))
+		(line (pt 0 80)(pt 16 80)(line_width 1))
+	)
+	(port
+		(pt 0 96)
+		(input)
+		(text "Data[13..0]" (rect 0 0 42 12)(font "Arial" ))
+		(text "Data[13..0]" (rect 21 91 63 103)(font "Arial" ))
+		(line (pt 0 96)(pt 16 96)(line_width 3))
+	)
+	(port
+		(pt 0 112)
+		(input)
+		(text "DataEven[13..0]" (rect 0 0 64 12)(font "Arial" ))
+		(text "DataEven[13..0]" (rect 21 107 85 119)(font "Arial" ))
+		(line (pt 0 112)(pt 16 112)(line_width 3))
+	)
+	(port
+		(pt 0 128)
+		(input)
+		(text "DataOdd[13..0]" (rect 0 0 59 12)(font "Arial" ))
+		(text "DataOdd[13..0]" (rect 21 123 80 135)(font "Arial" ))
+		(line (pt 0 128)(pt 16 128)(line_width 3))
+	)
+	(port
+		(pt 256 32)
+		(output)
+		(text "CLKDivPos" (rect 0 0 49 12)(font "Arial" ))
+		(text "CLKDivPos" (rect 186 27 235 39)(font "Arial" ))
+		(line (pt 256 32)(pt 240 32)(line_width 1))
+	)
+	(port
+		(pt 256 48)
+		(output)
+		(text "CLKDivNeg" (rect 0 0 50 12)(font "Arial" ))
+		(text "CLKDivNeg" (rect 185 43 235 55)(font "Arial" ))
+		(line (pt 256 48)(pt 240 48)(line_width 1))
+	)
+	(port
+		(pt 256 64)
+		(output)
+		(text "CLKDivFaster" (rect 0 0 60 12)(font "Arial" ))
+		(text "CLKDivFaster" (rect 175 59 235 71)(font "Arial" ))
+		(line (pt 256 64)(pt 240 64)(line_width 1))
+	)
+	(port
+		(pt 256 80)
+		(output)
+		(text "WriteEnableEven" (rect 0 0 71 12)(font "Arial" ))
+		(text "WriteEnableEven" (rect 164 75 235 87)(font "Arial" ))
+		(line (pt 256 80)(pt 240 80)(line_width 1))
+	)
+	(port
+		(pt 256 96)
+		(output)
+		(text "ReadEnableEven" (rect 0 0 71 12)(font "Arial" ))
+		(text "ReadEnableEven" (rect 164 91 235 103)(font "Arial" ))
+		(line (pt 256 96)(pt 240 96)(line_width 1))
+	)
+	(port
+		(pt 256 112)
+		(output)
+		(text "WriteEnableOdd" (rect 0 0 66 12)(font "Arial" ))
+		(text "WriteEnableOdd" (rect 169 107 235 119)(font "Arial" ))
+		(line (pt 256 112)(pt 240 112)(line_width 1))
+	)
+	(port
+		(pt 256 128)
+		(output)
+		(text "ReadEnableOdd" (rect 0 0 66 12)(font "Arial" ))
+		(text "ReadEnableOdd" (rect 169 123 235 135)(font "Arial" ))
+		(line (pt 256 128)(pt 240 128)(line_width 1))
+	)
+	(port
+		(pt 256 144)
+		(output)
+		(text "BuffOn" (rect 0 0 29 12)(font "Arial" ))
+		(text "BuffOn" (rect 206 139 235 151)(font "Arial" ))
+		(line (pt 256 144)(pt 240 144)(line_width 1))
+	)
+	(port
+		(pt 256 160)
+		(output)
+		(text "AddrWriteEven[11..0]" (rect 0 0 88 12)(font "Arial" ))
+		(text "AddrWriteEven[11..0]" (rect 147 155 235 167)(font "Arial" ))
+		(line (pt 256 160)(pt 240 160)(line_width 3))
+	)
+	(port
+		(pt 256 176)
+		(output)
+		(text "AddrWriteOdd[11..0]" (rect 0 0 82 12)(font "Arial" ))
+		(text "AddrWriteOdd[11..0]" (rect 153 171 235 183)(font "Arial" ))
+		(line (pt 256 176)(pt 240 176)(line_width 3))
+	)
+	(port
+		(pt 256 192)
+		(output)
+		(text "AddrReadEven[11..0]" (rect 0 0 88 12)(font "Arial" ))
+		(text "AddrReadEven[11..0]" (rect 147 187 235 199)(font "Arial" ))
+		(line (pt 256 192)(pt 240 192)(line_width 3))
+	)
+	(port
+		(pt 256 208)
+		(output)
+		(text "AddrReadOdd[11..0]" (rect 0 0 82 12)(font "Arial" ))
+		(text "AddrReadOdd[11..0]" (rect 153 203 235 215)(font "Arial" ))
+		(line (pt 256 208)(pt 240 208)(line_width 3))
+	)
+	(port
+		(pt 256 224)
+		(output)
+		(text "RAMWriteClock" (rect 0 0 69 12)(font "Arial" ))
+		(text "RAMWriteClock" (rect 166 219 235 231)(font "Arial" ))
+		(line (pt 256 224)(pt 240 224)(line_width 1))
+	)
+	(port
+		(pt 256 240)
+		(output)
+		(text "DataOut[13..0]" (rect 0 0 56 12)(font "Arial" ))
+		(text "DataOut[13..0]" (rect 179 235 235 247)(font "Arial" ))
+		(line (pt 256 240)(pt 240 240)(line_width 3))
+	)
+	(port
+		(pt 256 256)
+		(output)
+		(text "DataOutSlow[13..0]" (rect 0 0 74 12)(font "Arial" ))
+		(text "DataOutSlow[13..0]" (rect 161 251 235 263)(font "Arial" ))
+		(line (pt 256 256)(pt 240 256)(line_width 3))
+	)
+	(port
+		(pt 256 272)
+		(output)
+		(text "ReadyBuff" (rect 0 0 46 12)(font "Arial" ))
+		(text "ReadyBuff" (rect 189 267 235 279)(font "Arial" ))
+		(line (pt 256 272)(pt 240 272)(line_width 1))
+	)
+	(drawing
+		(rectangle (rect 16 16 240 288)(line_width 1))
+	)
+)
